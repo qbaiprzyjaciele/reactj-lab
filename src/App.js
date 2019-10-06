@@ -9,18 +9,11 @@ class App extends Component {
   state  = {
     persons: [
       { name:'Andrzej',age:28 },
-      { name:'Jan', age:29 }
+      { name:'Jan', age:29 },
+      { name:'Jędrzej', age:34}
     ],
     user: 'Default User' ,
     showPersons: false
-  }
-
-  switchNameHandler = (newName) => {
-    console.log('It was clicked!');
-    this.setState({persons:[
-      { name:newName, age:43 },
-      { name:'Andrzejownik', age:67 }
-    ]});
   }
 
   nameChangedHandler = (event) => {
@@ -47,6 +40,12 @@ class App extends Component {
     this.setState({showPersons:!doesShow});
   }
 
+  deletePersonHandler = (personIndex) => {
+      const persons = [...this.state.persons];
+      persons.splice(personIndex, 1);
+      this.setState({persons: persons});
+  }
+
   render() {
     const style = {
       backgroundColor: 'white',
@@ -56,7 +55,23 @@ class App extends Component {
       cursor: 'pointer'
     }
 
+    let persons = null;
 
+    if(this.state.showPersons) {
+      persons = (
+        <div>
+          { this.state.persons.map((person, index) => {
+            return <Person 
+            name={person.name} 
+            age={person.age}
+            click={this.deletePersonHandler.bind(index)}/>
+          })}
+            <UserInput userName={this.state.user} change={this.userInputHandler}></UserInput>
+            <UserOutput userName={this.state.user} ></UserOutput>
+            <UserOutput userName={this.state.user} click={this.userOutputClickHandler} ></UserOutput>
+        </div>
+      );
+    }
 
     return (
       <div className="App">
@@ -65,27 +80,7 @@ class App extends Component {
         <button 
         style={style}
         onClick={ this.togglePersonsHandler } >Swith name</button>
-        { 
-          this.state.showPersons ? 
-          <div>
-            <Person
-              name={this.state.persons[0].name} 
-              age={this.state.persons[0].age}
-              click={this.switchNameHandler.bind(this, 'Bind-1')}
-              changed={this.nameChangedHandler}> 
-              </Person>
-            <Person 
-              name={this.state.persons[1].name} 
-              age={this.state.persons[1].age}
-              click={this.switchNameHandler.bind(this, 'Bind-2')}
-              changed={this.nameChangedHandler}> 
-              > Whaeva 
-              </Person>
-            <UserInput userName={this.state.user} change={this.userInputHandler}></UserInput>
-            <UserOutput userName={this.state.user} ></UserOutput>
-            <UserOutput userName={this.state.user} click={this.userOutputClickHandler} ></UserOutput>
-        </div> : null
-        }
+        {persons}
       </div>
     );
   }
