@@ -8,9 +8,9 @@ import UserOutput from './UserOutput/UserOutput';
 class App extends Component {
   state  = {
     persons: [
-      { name:'Andrzej',age:28 },
-      { name:'Jan', age:29 },
-      { name:'Jędrzej', age:34}
+      { id:1, name:'Andrzej',age:28 },
+      { id:2, name:'Jan', age:29 },
+      { id:3, name:'Jędrzej', age:34}
     ],
     user: 'Default User' ,
     showPersons: false
@@ -40,10 +40,15 @@ class App extends Component {
     this.setState({showPersons:!doesShow});
   }
 
-  deletePersonHandler = (personIndex) => {
-      const persons = [...this.state.persons];
-      persons.splice(personIndex, 1);
-      this.setState({persons: persons});
+  deletePersonHandler = (personId) => {
+      console.log("Hallo lallo allo!");
+      const personIndex = this.state.persons.findIndex(id => {
+        return personId === id;
+      });
+      const person = {...this.state.persons[personIndex]};
+      this.state.persons[personIndex] = person;
+      this.setState()
+      this.setState({persons: this.state.persons});
   }
 
   render() {
@@ -64,7 +69,8 @@ class App extends Component {
             return <Person 
             name={person.name} 
             age={person.age}
-            click={this.deletePersonHandler.bind(index)}/>
+            key={person.id}
+            click={this.deletePersonHandler.bind(person.id)}/>
           })}
             <UserInput userName={this.state.user} change={this.userInputHandler}></UserInput>
             <UserOutput userName={this.state.user} ></UserOutput>
