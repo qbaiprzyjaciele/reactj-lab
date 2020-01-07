@@ -45,15 +45,15 @@ class App extends Component {
       const personIndex = this.state.persons.findIndex(id => {
         return personId === id;
       });
-      const person = {...this.state.persons[personIndex]};
-      this.state.persons[personIndex] = person;
-      this.setState()
-      this.setState({persons: this.state.persons});
+      const persons = [...this.state.persons];
+      persons.splice(personIndex, 1);
+      this.setState({persons: persons});
   }
 
   render() {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       pading: '8px',
@@ -77,12 +77,24 @@ class App extends Component {
             <UserOutput userName={this.state.user} click={this.userOutputClickHandler} ></UserOutput>
         </div>
       );
+
+      style.backgroundColor = 'red';
+    }
+
+    let classes = [];
+
+    if (this.state.persons.length <=2) {
+      classes.push('red');
+    }
+
+    if (this.state.persons.length <=1) {
+      classes.push('bold');
     }
 
     return (
       <div className="App">
         <h1>Hi how are you?</h1>
-        <p>it works</p>
+        <p className={classes.join(' ')}>it works</p>
         <button 
         style={style}
         onClick={ this.togglePersonsHandler } >Swith name</button>
